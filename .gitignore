@@ -1,3 +1,6 @@
 *.csv
 *.zip
 project/full_project.md
+*.env
+project/listings.json
+project/chroma_db*

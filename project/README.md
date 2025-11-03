@@ -1,56 +1,107 @@
-# HomeMatch: Personalized Real Estate Listings
+**HomeMatch: Personalized Real Estate Listings**
 
-Welcome to "HomeMatch," a proof-of-concept application by Future Homes Realty. This project uses Large Language Models (LLMs) and a vector database to transform standard real estate listings into personalized narratives that resonate with a buyer's unique preferences.
+**Overview**
+HomeMatch turns standard real estate listings into buyer‑personalized narratives. You can run it two ways:
+- 📴 Offline mode (no API credits required): fast demo with TF‑IDF retrieval and heuristic personalization
+- 🌐 Online mode (OpenAI + Chroma): full LLM generation, vector search, and personalized rewrite
 
-## Project Structure
+**Project Structure**
+- generate_listings.py — Generates listings with an LLM into listings.json (online)
+- homematch_app.py — Loads listings, builds Chroma DB, retrieves top‑k, and personalizes with an LLM (online)
+- homematch_offline.py — Fully offline: TF‑IDF retrieval + heuristic personalization (no APIs)
+- offline_listings.json — Ready‑to‑use sample listings for offline runs
+- requirements.txt — Online dependencies
+- .env.example — Template for environment variables (API key and custom base URL)
+- listings.json — Generated at runtime by generate_listings.py (online)
+- chroma_db/ — Chroma persistence directory (generated)
 
--   `README.md`: This file.
--   `requirements.txt`: A list of all necessary Python packages.
--   `.env`: A file you must create to store your OpenAI API key (e.g., `OPENAI_API_KEY=sk-YourKeyHere`).
--   `listings.json`: This file will be created by the `generate_listings.py` script. It contains the 10+ synthetic property listings.
--   `generate_listings.py`: A script to generate the synthetic real estate listings using an LLM and save them to `listings.json`.
--   `homematch_app.py`: The main application. It loads the listings, stores them in a ChromaDB vector database, collects buyer preferences, performs a semantic search, and generates personalized descriptions.
--   `/chroma_db`: A directory that will be created by `homematch_app.py` to persist the vector database.
+**Prerequisites**
+- Python 3.10+ recommended
+- A virtual environment (venv)
 
-## 🚀 How to Run
+**Set Up A Virtual Environment**
+- macOS/Linux:
+```
+python -m venv venv
+source venv/bin/activate
+```
+- Windows (PowerShell):
+```
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
 
-1.  **Set up the Environment:**
-    * Create a Python virtual environment:
-        ```bash
-        python -m venv venv
-        source venv/bin/activate  # On Windows: venv\Scripts\activate
-        ```
-    * Install the required packages:
-        ```bash
-        pip install -r requirements.txt
-        ```
+**Offline Mode (No API Key Needed) ✅**
+- Install the single dependency:
+```
+pip install scikit-learn
+```
+- Run offline pipeline:
+```
+python homematch_offline.py
+```
+- Optional flags:
+  - --k 5  (change top‑k results)
+  - --listings path/to/your_listings.json  (defaults to listings.json if present; otherwise offline_listings.json)
+  - --interactive  (enter your own buyer preferences via prompt)
 
-2.  **Set Your API Key:**
-    * Create a file named `.env` in the root of the project.
-    * Add your OpenAI API key to it:
-        ```
-        OPENAI_API_KEY=sk-YourKeyHere
-        ```
+What it does:
+- Loads listings JSON
+- Builds a TF‑IDF index and retrieves top‑k matches against the buyer profile
+- Produces a clean, factual, personalized description with no external API calls
 
-3.  **Step 1: Generate Listings:**
-    * Run the listing generation script. This will use the LLM to create 10 realistic listings and save them to `listings.json`.
-        ```bash
-        python generate_listings.py
-        ```
+**Online Mode (OpenAI + Chroma) 🚀**
+- Install dependencies:
+```
+pip install -r requirements.txt
+```
+- Configure your environment:
+  1) Copy .env.example to .env
+  2) Set your key and (optionally) custom base URL
+```
+OPENAI_API_KEY=sk-your-key
+# Optional: a custom base URL (e.g., Vocareum or other OpenAI‑compatible gateways)
+OPENAI_API_BASE=https://openai.vocareum.com/v1
+# Optional: override models
+OPENAI_MODEL=gpt-3.5-turbo
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+```
+- Step 1: Generate listings (creates listings.json)
+```
+python generate_listings.py
+```
+- Step 2: Run the app (builds vector DB, retrieves top‑3, personalizes)
+```
+python homematch_app.py
+```
+- Output: You’ll see the top‑3 matches with personalized descriptions printed in the console.
 
-4.  **Step 2: Run the HomeMatch Application:**
-    * Run the main application. This will load the listings, build the database, and run the personalization pipeline based on the hard-coded buyer preferences.
-        ```bash
-        python homematch_app.py
-        ```
-    * The console will output the 3 most relevant listings, each with a new, personalized description.
+**Tip: No credits but want to test online flow?**
+If you don’t have API credits to generate listings, you can still test the vector DB + personalization pipeline by copying the offline sample:
+```
+copy offline_listings.json listings.json   # Windows
+cp offline_listings.json listings.json     # macOS/Linux
+python homematch_app.py
+```
 
-## 💡 Stand-Out Suggestion: Multimodal Search
+**Troubleshooting**
+- “API key not set” or immediate exit:
+  - Ensure .env is created and OPENAI_API_KEY is present
+  - If using a gateway, also set OPENAI_API_BASE
+- LangChain prompt error in generate_listings.py (depending on versions):
+  - If you see an error related to prompt partial variables, update prompt construction to use .partial(...). Or use the offline copy command above to proceed
+- Chroma persistence issues:
+  - The app resets the Chroma directory each run; if you need to preserve state, set reset=False in setup_vector_database (in code)
+- Windows PowerShell execution policy prevents venv activation:
+  - Run PowerShell as Administrator:  Set-ExecutionPolicy RemoteSigned
 
-This project fully meets the core requirements. To implement the "Stand-Out Suggestion" (multimodal search with CLIP):
+**Frequently Asked**
+- Can I change top‑k matches online?
+  - Yes. In code, change search_kwargs={"k": 3} in homematch_app.py
+- Can I provide my own listings to the offline script?
+  - Yes, pass --listings path/to/your.json as long as it follows the same schema
+- Does the app support custom OpenAI base URLs?
+  - Yes. Set OPENAI_API_BASE in .env; the app will use it automatically
 
-1.  **Modify Data Generation:** The `Listing` Pydantic model in `generate_listings.py` would be updated to include an `image_prompt` field (e.g., "A photo of a modern kitchen with a large granite island").
-2.  **Embed Images:** Use a multimodal embedding model (like `CLIPModel` from `transformers`) to generate embeddings for these image prompts (or actual images, if you had them).
-3.  **Multimodal Database:** Store both the `text_embedding` (from OpenAI) and the `image_embedding` (from CLIP) in ChromaDB.
-4.  **Search Logic:** When a buyer searches, embed their preference text using *both* the OpenAI text model *and* the CLIP text model.
-5.  **Hybrid Search:** Query the database using both embeddings (text-vs-text and text-vs-image) and use a re-ranking algorithm (like Reciprocal Rank Fusion) to combine the results, surfacing listings that are both textually and visually relevant.
+**Credits**
+Built to satisfy the HomeMatch brief, including synthetic data generation, vector database search, and buyer‑personalized rewrites, with an offline path for environments without API credits.

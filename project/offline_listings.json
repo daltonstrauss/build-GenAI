@@ -1,0 +1,94 @@
+{
+  "listings": [
+    {
+      "neighborhood": "Green Oaks",
+      "price": 800000,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "house_size_sqft": 2000,
+      "description": "Eco-friendly 3-bedroom home with solar panels, open-concept kitchen, hardwood floors, and abundant natural light. Spacious living room opens to a fenced backyard ideal for gardening.",
+      "neighborhood_description": "Green Oaks is an environmentally conscious community with community gardens, organic markets, bike paths, and easy access to public transit."
+    },
+    {
+      "neighborhood": "Harbor View",
+      "price": 1150000,
+      "bedrooms": 4,
+      "bathrooms": 3.5,
+      "house_size_sqft": 3200,
+      "description": "Contemporary coastal home featuring a chef's kitchen with quartz counters, primary suite with balcony, and a two-car garage. Energy-efficient HVAC and double-pane windows.",
+      "neighborhood_description": "Harbor View overlooks the marina with seafood restaurants, waterfront parks, and weekend markets. Quick access to ferries and express buses."
+    },
+    {
+      "neighborhood": "Maple Ridge",
+      "price": 540000,
+      "bedrooms": 3,
+      "bathrooms": 2.5,
+      "house_size_sqft": 1850,
+      "description": "Charming two-story with updated kitchen, cozy fireplace, and a sunny breakfast nook. Backyard includes a small patio and raised garden beds.",
+      "neighborhood_description": "Tree-lined streets, neighborhood playgrounds, and highly rated public schools. Convenient shopping plaza and family-run cafes nearby."
+    },
+    {
+      "neighborhood": "Sunnyvale Heights",
+      "price": 920000,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "house_size_sqft": 2600,
+      "description": "Bright, open-plan home with vaulted ceilings, a large island kitchen, and a flexible office/guest room. Attached two-car garage and recent roof upgrade.",
+      "neighborhood_description": "Quiet residential enclave with parks, community pool, and easy highway access. Weekend farmers market and several top-rated schools."
+    },
+    {
+      "neighborhood": "Brookside",
+      "price": 675000,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "house_size_sqft": 1700,
+      "description": "Single-level ranch with renovated bathrooms, energy-efficient appliances, and a spacious living room. French doors open to a private, landscaped yard.",
+      "neighborhood_description": "Walkable streets with local grocers, coffee shops, and bike-friendly roads. Frequent bus service connects to downtown."
+    },
+    {
+      "neighborhood": "Riverton Flats",
+      "price": 495000,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "house_size_sqft": 1100,
+      "description": "Modern condo with floor-to-ceiling windows, stainless appliances, and in-unit laundry. Secure building with gym and dedicated bike storage.",
+      "neighborhood_description": "Urban neighborhood along the river with arts venues, theaters, and a growing restaurant scene. Excellent transit connections."
+    },
+    {
+      "neighborhood": "Cedar Park",
+      "price": 735000,
+      "bedrooms": 3,
+      "bathrooms": 2.5,
+      "house_size_sqft": 1950,
+      "description": "Well-maintained home featuring a spacious kitchen, energy-saving insulation, and a two-car garage. Backyard deck ideal for outdoor dining.",
+      "neighborhood_description": "Family-friendly area with bike lanes, dog parks, and quick bus routes. Close to shopping centers and a popular community garden."
+    },
+    {
+      "neighborhood": "Lakeside Terrace",
+      "price": 1280000,
+      "bedrooms": 5,
+      "bathrooms": 4,
+      "house_size_sqft": 3600,
+      "description": "Expansive home with lake views, gourmet kitchen, and a great room perfect for entertaining. Primary suite with spa bath; three-car garage.",
+      "neighborhood_description": "Upscale community with waterfront trails, kayak launches, and fine dining. Quick highway access for regional commuting."
+    },
+    {
+      "neighborhood": "Downtown Loft District",
+      "price": 820000,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "house_size_sqft": 1400,
+      "description": "Industrial-chic loft with exposed brick, high ceilings, and a modern kitchen. Elevator building, rooftop deck, and dedicated parking.",
+      "neighborhood_description": "Vibrant urban scene with theaters, galleries, coffee houses, and late-night eateries. Excellent bike share and subway lines."
+    },
+    {
+      "neighborhood": "Willow Creek",
+      "price": 610000,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "house_size_sqft": 1650,
+      "description": "Move-in ready home with a sunny living room, updated HVAC, and a fenced backyard perfect for pets or gardening. Attached garage with storage.",
+      "neighborhood_description": "Suburban tranquility near greenbelts and walking paths. Strong school district and convenient big-box and local shopping."
+    }
+  ]
+}
