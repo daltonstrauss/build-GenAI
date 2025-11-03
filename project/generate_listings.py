@@ -7,13 +7,10 @@ from typing import List
 import os
 from dotenv import load_dotenv
 
-# Load API key
 load_dotenv()
 if os.getenv("OPENAI_API_KEY") is None:
     print("OPENAI_API_KEY not set in .env file.")
     exit()
-
-# --- Pydantic Data Models for Structured Output ---
 
 class Listing(BaseModel):
     neighborhood: str = Field(description="Name of the neighborhood.")
@@ -27,21 +24,13 @@ class Listing(BaseModel):
 class ListingCollection(BaseModel):
     listings: List[Listing] = Field(description="A list of 10 real estate listings.")
 
-# --- Main Generation Logic ---
-
 def generate_listings():
     """
     Uses an LLM to generate 10 synthetic real estate listings and saves them to listings.json.
     """
     print("Initializing LLM and Output Parser...")
-    
-    # Initialize the LLM
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
-    
-    # Initialize the parser
     parser = PydanticOutputParser(pydantic_object=ListingCollection)
-    
-    # Create the prompt template
     prompt_template = """
     You are an expert real estate data generator. Create a diverse and realistic
     set of 10 property listings. Include a mix of property types (e.g., condo,
@@ -58,31 +47,24 @@ def generate_listings():
 
     {format_instructions}
     """
-    
+
     prompt = ChatPromptTemplate.from_template(
         template=prompt_template,
         partial_variables={"format_instructions": parser.get_format_instructions()}
     )
-    
-    # Create the chain
     chain = prompt | llm | parser
-    
     print("Generating 10 listings... (This may take a moment)")
     
     try:
-        # Invoke the chain
         result = chain.invoke({})
-        
-        # Save the listings to a JSON file
         with open("listings.json", "w") as f:
             # Use .model_dump_json() for Pydantic v2
             json.dump(result.model_dump(), f, indent=2)
-            
-        print("\n✅ Successfully generated and saved 10 listings to 'listings.json'.")
+        print("\nSuccessfully generated and saved 10 listings to 'listings.json'.")
         print(f"Example listing neighborhood: {result.listings[0].neighborhood}")
 
     except Exception as e:
-        print(f"\n❌ An error occurred during generation: {e}")
+        print(f"\nAn error occurred during generation: {e}")
         print("Please ensure your OPENAI_API_KEY is correct and you have API credits.")
 
 if __name__ == "__main__":

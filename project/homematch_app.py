@@ -15,7 +15,7 @@ def load_environment():
     """Load .env, require API key, and optionally honor a custom base URL."""
     load_dotenv()
     if not os.getenv("OPENAI_API_KEY"):
-        print("❌ OPENAI_API_KEY not set in .env file. Please create a .env file.")
+        print("OPENAI_API_KEY not set in .env file. Please create a .env file.")
         return False
     # Optional: custom base URL (e.g., Vocareum, Azure OpenAI-compatible endpoints)
     custom_base = os.getenv("OPENAI_API_BASE") or os.getenv("OPENAI_BASE_URL") or os.getenv("OPENAI_API_HOST")
@@ -34,8 +34,8 @@ def load_and_prepare_listings():
         with open(LISTINGS_FILE, "r", encoding="utf-8") as f:
             listings_data = json.load(f)["listings"]
     except FileNotFoundError:
-        print(f"❌ Error: '{LISTINGS_FILE}' not found.")
-        print("Please run `python generate_listings.py` first or provide a listings.json file.")
+        print(f"Error: '{LISTINGS_FILE}' not found.")
+        print("Please run `python generate_listings.py` first or provide a listings.json file or use the offline version.")
         return None
 
     documents = []
@@ -75,6 +75,7 @@ def setup_vector_database(documents, embeddings, persist_directory=PERSIST_DIREC
 def get_buyer_preferences():
     """
     Returns a hard-coded set of buyer preferences as a single narrative string.
+    Update this as needed to simulate different buyer profiles.
     """
     answers = [
         "A comfortable three-bedroom house with a spacious kitchen and a cozy living room.",
@@ -89,6 +90,11 @@ def get_buyer_preferences():
     return profile
 
 def create_personalization_chain(llm):
+    """
+    Creates a LangChain chain to generate personalized property descriptions
+    based on buyer preferences and listing data.
+    Update this template as needed to refine the personalization approach.
+    """
     template = """
     You are an expert real estate copywriter at 'Future Homes Realty'.
     Your task is to rewrite a property listing to personally resonate with a specific buyer.
