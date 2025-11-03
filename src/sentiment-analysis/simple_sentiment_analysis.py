@@ -1,7 +1,7 @@
-import openai
-import os
 import pandas as pd
 import json
+import openai
+import os
 from langchain.chat_models import ChatOpenAI # this is the new import statement
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import PydanticOutputParser
@@ -10,11 +10,13 @@ from typing import List
 from random import sample 
 from langchain.document_loaders.csv_loader import CSVLoader
 
-openai.api_base = "https://openai.vocareum.com/v1"
 
-# Define OpenAI API key 
+
+openai.api_base = "https://openai.vocareum.com/v1"
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
+
+
 
 def load_and_clean_csv(csv_file):
     """
@@ -37,26 +39,35 @@ def load_and_clean_csv(csv_file):
     
     return df
 
-
-loader = CSVLoader(file_path='./tv-reviews.csv')
-data = loader.load()
-
-model_name = 'gpt-3.5-turbo'
-# llm = OpenAI(model_name=model_name, temperature=0) - This has been replaced with the next line of code
-llm = ChatOpenAI()
-
-class ReviewSentiment(BaseModel):
-    positives: List[NonNegativeInt] = Field(description="index of a positive TV review, starting from 0")
-    negatives: List[NonNegativeInt] = Field(description="index of a negative TV review, starting from 0")
-        
-parser = PydanticOutputParser(pydantic_object=ReviewSentiment)
-print(parser.get_format_instructions())
+def classify_reviews_by_rating(df, rating_threshold=6):
+    """
+    Classify reviews as positive/negative based on rating threshold.
+    
+    Args:
+        df: DataFrame with cleaned review data
+        rating_threshold: Reviews with rating > threshold are positive
+    
+    Returns:
+        Dictionary with positive and negative indices
+    """
+    positive_indices = []
+    negative_indices = []
+    
+    for index, row in df.iterrows():
+        if row['Review_Rating'] > rating_threshold:
+            positive_indices.append(index)
+        else:
+            negative_indices.append(index)
+    
+    return {
+        "positives": positive_indices,
+        "negatives": negative_indices
+    }
 
 def main():
     # Load and process the data
-    loader = CSVLoader(file_path='./tv-reviews.csv')
-
-    df = load_and_clean_csv(loader.file_path)
+    csv_file = 'tv_reviews.csv'
+    df = load_and_clean_csv(csv_file)
     
     print(f"Loaded {len(df)} reviews")
     print(f"Rating distribution:\n{df['Review_Rating'].value_counts().sort_index()}")
@@ -81,3 +92,6 @@ def main():
     print("\nJSON saved to 'sentiment_output.json'")
     
     return sentiment_result
+
+if __name__ == "__main__":
+    result = main()
