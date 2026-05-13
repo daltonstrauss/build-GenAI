@@ -33,4 +33,3 @@ Authoritative setup and run instructions for HomeMatch live in `project/README.m
 
 - After edits, run the smallest relevant command (for example the script the user cares about, or `python homematch_offline.py` from `project/` when touching HomeMatch offline code).
 - There is no repo-wide test suite; `src/test/function-test.py` is ad hoc and not a guaranteed gate for all modules.
-
